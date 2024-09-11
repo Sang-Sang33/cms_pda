@@ -1,0 +1,44 @@
+{
+  "id": "4679469",
+  "name": "flutter-cms",
+  "font_family": "iconfont",
+  "css_prefix_text": "icon-",
+  "description": "",
+  "glyphs": [
+    {
+      "icon_id": "1778576",
+      "name": "库存明细",
+      "font_class": "detail",
+      "unicode": "e646",
+      "unicode_decimal": 58950
+    },
+    {
+      "icon_id": "6297001",
+      "name": "新出库",
+      "font_class": "outstorage",
+      "unicode": "e614",
+      "unicode_decimal": 58900
+    },
+    {
+      "icon_id": "6297003",
+      "name": "新入库",
+      "font_class": "instorage",
+      "unicode": "e616",
+      "unicode_decimal": 58902
+    },
+    {
+      "icon_id": "12706569",
+      "name": "盘点（物资管理）",
+      "font_class": "search",
+      "unicode": "e637",
+      "unicode_decimal": 58935
+    },
+    {
+      "icon_id": "38828540",
+      "name": "盘点业务",
+      "font_class": "stocktake",
+      "unicode": "e669",
+      "unicode_decimal": 58985
+    }
+  ]
+}
