@@ -1,4 +1,5 @@
 import 'package:cms_pda/screens/collect_screen.dart';
+import 'package:cms_pda/screens/collet_detail_screen.dart';
 import 'package:cms_pda/screens/home_screen.dart';
 import 'package:cms_pda/screens/login_screen.dart';
 import 'package:cms_pda/screens/qc_check_screen.dart';
@@ -9,19 +10,25 @@ final GoRouter _router = GoRouter(
   routes: <RouteBase>[
     GoRoute(
       path: '/',
-      builder: (context, state) => const HomeScreen(),
+      builder: (_, __) => const HomeScreen(),
     ),
     GoRoute(
       path: '/login',
-      builder: (context, state) => const LoginScreen(),
+      builder: (_, __) => const LoginScreen(),
     ),
     GoRoute(
       path: '/collect',
-      builder: (context, state) => const CollectScreen(),
+      builder: (_, __) => const CollectScreen(),
+    ),
+    GoRoute(
+      path: '/collect/:materialName',
+      builder: (_, state) => ColletDetailScreen(
+        materialName: state.pathParameters['materialName']!,
+      ),
     ),
     GoRoute(
       path: '/qc/check',
-      builder: (context, state) => const QRViewExample(),
+      builder: (_, __) => const QRViewExample(),
     )
   ],
   initialLocation: '/login',
@@ -48,6 +55,22 @@ class MyApp extends StatelessWidget {
           foregroundColor: Colors.white,
           titleTextStyle: TextStyle(
             fontSize: 20,
+          ),
+        ),
+        scaffoldBackgroundColor: Colors.white,
+        outlinedButtonTheme: const OutlinedButtonThemeData(
+          style: ButtonStyle(
+            foregroundColor: WidgetStatePropertyAll<Color>(
+              Color(0xff008fff),
+            ),
+            backgroundColor: WidgetStatePropertyAll<Color>(
+              Color(0xffeef7ff),
+            ),
+            side: WidgetStatePropertyAll<BorderSide>(
+              BorderSide(
+                color: Color(0xffaed7f6),
+              ),
+            ),
           ),
         ),
       ),

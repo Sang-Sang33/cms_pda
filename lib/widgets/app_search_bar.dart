@@ -111,7 +111,10 @@ class _QRViewDialogState extends State<QRViewDialog> {
                 open = !open;
               });
             },
-            icon: Icon(open ? Icons.flashlight_on : Icons.flashlight_off),
+            icon: Icon(
+              open ? Icons.flashlight_on : Icons.flashlight_off,
+              color: Colors.white,
+            ),
           ),
         )
       ],
