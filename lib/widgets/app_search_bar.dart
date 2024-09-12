@@ -58,11 +58,14 @@ class _QRViewDialogState extends State<QRViewDialog> {
     setState(() {
       _qrViewController = controller;
     });
-
+    bool scanned = false;
     controller.scannedDataStream.listen(
       (scanData) {
-        widget.onScaned(scanData);
-        widget.onClosed();
+        if (!scanned) {
+          scanned = true;
+          widget.onScaned(scanData);
+          widget.onClosed();
+        }
       },
     );
   }
