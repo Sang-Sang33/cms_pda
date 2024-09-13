@@ -1,204 +1,206 @@
-import 'dart:developer';
-import 'dart:io';
-
-import 'package:flutter/foundation.dart';
+import 'package:cms_pda/commons/global_configs.dart';
+import 'package:cms_pda/models/check_info.dart';
+import 'package:cms_pda/models/value_label.dart';
+import 'package:cms_pda/widgets/app_search_bar.dart';
+import 'package:cms_pda/widgets/check_card.dart';
+import 'package:cms_pda/widgets/half_circle_border_clipper.dart';
+import 'package:cms_pda/widgets/main_description.dart';
 import 'package:flutter/material.dart';
-import 'package:qr_code_scanner/qr_code_scanner.dart';
+import 'package:go_router/go_router.dart';
 
-class QRViewExample extends StatefulWidget {
-  const QRViewExample({super.key});
+const List<CheckInfo> _checkInfos = [
+  CheckInfo(
+    materialCode: '3S848DF4817745',
+    nums: 600,
+    checkedNums: 500,
+    receivedNums: 400,
+  ),
+  CheckInfo(
+    materialCode: '3S848DF4354745',
+    nums: 520,
+    checkedNums: 500,
+    receivedNums: 250,
+  ),
+  CheckInfo(
+    materialCode: '3S83DF48145345',
+    nums: 300,
+    checkedNums: 100,
+    receivedNums: 100,
+  ),
+  CheckInfo(
+    materialCode: '3S848DF48153245',
+    nums: 630,
+    checkedNums: 300,
+    receivedNums: 120,
+  ),
+];
+
+class QcCheckScreen extends StatefulWidget {
+  const QcCheckScreen({super.key});
 
   @override
-  State<StatefulWidget> createState() => _QRViewExampleState();
+  State<StatefulWidget> createState() => _QcCheckScreenState();
 }
 
-class _QRViewExampleState extends State<QRViewExample> {
-  Barcode? result;
-  QRViewController? controller;
-  bool visible = true;
-  final GlobalKey qrKey = GlobalKey(debugLabel: 'QR');
+class _QcCheckScreenState extends State<QcCheckScreen> {
+  CheckStatus _checkStatus = CheckStatus.normal;
+  String _orderCode = '';
 
-  // In order to get hot reload to work we need to pause the camera if the platform
-  // is android, or resume the camera if the platform is iOS.
-  @override
-  void reassemble() {
-    super.reassemble();
-    if (Platform.isAndroid) {
-      controller!.pauseCamera();
+  List<Widget> _buildRadioGroup() {
+    final List<Widget> groups = [
+      const Text('请选择：'),
+    ];
+    for (var element in CheckStatus.values) {
+      groups.addAll([
+        Radio<CheckStatus>(
+          value: element,
+          groupValue: _checkStatus,
+          onChanged: (val) => setState(
+            () {
+              _checkStatus = val!;
+            },
+          ),
+          materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
+        ),
+        Text(element.label),
+      ]);
+      if (element.index != CheckStatus.values.length - 1) {
+        groups.add(
+          const SizedBox(
+            width: 8,
+          ),
+        );
+      }
     }
-    controller!.resumeCamera();
+    return groups;
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('qc'),
+        title: const Text('来料QC抽检'),
         centerTitle: true,
       ),
+      bottomNavigationBar: Container(
+        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+        color: const Color.fromARGB(255, 219, 230, 240),
+        child: FilledButton(
+          onPressed: _orderCode.isEmpty
+              ? null
+              : () {
+                  context.push('/qc/check/$_orderCode');
+                },
+          child: const Text('查看校验单'),
+        ),
+      ),
       body: Column(
-        children: <Widget>[
-          Expanded(
-            flex: 4,
-            child: Visibility(
-              maintainSize: true,
-              maintainState: true,
-              visible: visible,
-              child: _buildQrView(context),
+        children: [
+          AppSearchBar(
+            hintText: '扫描送货单号',
+            onChanged: (value) {
+              print(value);
+              setState(() {
+                _orderCode = value;
+              });
+            },
+          ),
+          Container(
+            padding: const EdgeInsets.symmetric(vertical: 8),
+            margin: const EdgeInsets.only(bottom: 12),
+            decoration: const BoxDecoration(
+              color: Colors.white,
+              boxShadow: [
+                GlobalConfigs.shadow,
+              ],
+            ),
+            child: Row(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: _buildRadioGroup(),
+            ),
+          ),
+          HalfCircleBorderContainer(
+            child: Column(
+              children: [
+                Row(
+                  children: [
+                    const Expanded(
+                      flex: 1,
+                      child: MainDescription(
+                        label: '作业员',
+                        value: 'admin',
+                      ),
+                    ),
+                    const SizedBox(
+                      width: 6,
+                    ),
+                    Expanded(
+                      flex: 1,
+                      child: MainDescription(
+                        label: '送货单',
+                        value: _orderCode,
+                      ),
+                    ),
+                  ],
+                ),
+                const SizedBox(
+                  height: 6,
+                ),
+                const Row(
+                  children: [
+                    Expanded(
+                      flex: 1,
+                      child: MainDescription(
+                        label: '总数量',
+                        value: '640',
+                      ),
+                    ),
+                    SizedBox(
+                      width: 6,
+                    ),
+                    Expanded(
+                      flex: 1,
+                      child: MainDescription(
+                        label: '需抽检总数量',
+                        value: '600',
+                      ),
+                    ),
+                  ],
+                ),
+                const Row(
+                  children: [
+                    Expanded(
+                      flex: 1,
+                      child: MainDescription(
+                        label: '已抽检数量',
+                        value: '360',
+                      ),
+                    ),
+                  ],
+                ),
+              ],
             ),
           ),
           Expanded(
             flex: 1,
-            child: FittedBox(
-              fit: BoxFit.contain,
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                children: <Widget>[
-                  if (result != null)
-                    Text(
-                        'Barcode Type: ${describeEnum(result!.format)}   Data: ${result!.code}')
-                  else
-                    const Text('Scan a code'),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    children: <Widget>[
-                      Container(
-                        margin: const EdgeInsets.all(8),
-                        child: ElevatedButton(
-                            onPressed: () async {
-                              await controller?.toggleFlash();
-                              setState(() {});
-                            },
-                            child: FutureBuilder(
-                              future: controller?.getFlashStatus(),
-                              builder: (context, snapshot) {
-                                return Text('Flash: ${snapshot.data}');
-                              },
-                            )),
-                      ),
-                      Container(
-                        margin: const EdgeInsets.all(8),
-                        child: ElevatedButton(
-                            onPressed: () async {
-                              await controller?.flipCamera();
-                              setState(() {});
-                            },
-                            child: FutureBuilder(
-                              future: controller?.getCameraInfo(),
-                              builder: (context, snapshot) {
-                                if (snapshot.data != null) {
-                                  return Text(
-                                      'Camera facing ${describeEnum(snapshot.data!)}');
-                                } else {
-                                  return const Text('loading');
-                                }
-                              },
-                            )),
-                      )
-                    ],
+            child: CustomScrollView(
+              slivers: [
+                SliverList.separated(
+                  itemBuilder: (context, index) => CheckCard(
+                    checkInfo: _checkInfos[index],
                   ),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    children: <Widget>[
-                      Container(
-                        margin: const EdgeInsets.all(8),
-                        child: ElevatedButton(
-                          onPressed: () async {
-                            await controller?.pauseCamera();
-                          },
-                          child: const Text('pause',
-                              style: TextStyle(fontSize: 20)),
-                        ),
-                      ),
-                      Container(
-                        margin: const EdgeInsets.all(8),
-                        child: ElevatedButton(
-                          onPressed: () async {
-                            await controller?.resumeCamera();
-                          },
-                          child: const Text('resume',
-                              style: TextStyle(fontSize: 20)),
-                        ),
-                      ),
-                      Container(
-                        margin: const EdgeInsets.all(8),
-                        child: ElevatedButton(
-                          onPressed: () async {
-                            setState(() {
-                              visible = true;
-                            });
-                          },
-                          child: const Text('open',
-                              style: TextStyle(fontSize: 20)),
-                        ),
-                      )
-                    ],
+                  separatorBuilder: (BuildContext context, int index) =>
+                      const SizedBox(
+                    height: 12,
                   ),
-                ],
-              ),
+                  itemCount: _checkInfos.length,
+                ),
+              ],
             ),
           )
         ],
       ),
     );
-  }
-
-  Widget _buildQrView(BuildContext context) {
-    // For this example we check how width or tall the device is and change the scanArea and overlay accordingly.
-    var scanArea = (MediaQuery.of(context).size.width < 400 ||
-            MediaQuery.of(context).size.height < 400)
-        ? 150.0
-        : 300.0;
-    // To ensure the Scanner view is properly sizes after rotation
-    // we need to listen for Flutter SizeChanged notification and update controller
-    return QRView(
-      key: qrKey,
-      onQRViewCreated: _onQRViewCreated,
-      overlay: QrScannerOverlayShape(
-        borderColor: Colors.red,
-        borderRadius: 10,
-        borderLength: 30,
-        borderWidth: 10,
-        cutOutSize: scanArea,
-      ),
-      onPermissionSet: (ctrl, p) => _onPermissionSet(context, ctrl, p),
-    );
-  }
-
-  void _onQRViewCreated(QRViewController controller) {
-    setState(() {
-      this.controller = controller;
-    });
-
-    controller.scannedDataStream.listen(
-      (scanData) {
-        setState(() {
-          result = scanData;
-          visible = false;
-        });
-      },
-      onDone: () {
-        setState(() {
-          visible = false;
-        });
-      },
-    );
-  }
-
-  void _onPermissionSet(BuildContext context, QRViewController ctrl, bool p) {
-    log('${DateTime.now().toIso8601String()}_onPermissionSet $p');
-    if (!p) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('no Permission')),
-      );
-    }
-  }
-
-  @override
-  void dispose() {
-    controller?.dispose();
-    super.dispose();
   }
 }

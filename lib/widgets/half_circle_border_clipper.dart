@@ -1,5 +1,6 @@
 import 'dart:math';
 
+import 'package:cms_pda/commons/global_configs.dart';
 import 'package:flutter/material.dart';
 
 class HalfCircleBorderClipper extends CustomClipper<Path> {
@@ -36,5 +37,32 @@ class HalfCircleBorderClipper extends CustomClipper<Path> {
   @override
   bool shouldReclip(covariant CustomClipper<Path> oldClipper) {
     return false;
+  }
+}
+
+class HalfCircleBorderContainer extends StatelessWidget {
+  const HalfCircleBorderContainer({
+    super.key,
+    required this.child,
+  });
+
+  final Widget child;
+
+  @override
+  Widget build(BuildContext context) {
+    return ClipPath(
+      clipper: HalfCircleBorderClipper(),
+      child: Container(
+        padding: const EdgeInsets.all(24),
+        margin: const EdgeInsets.only(bottom: 12),
+        decoration: BoxDecoration(
+          color: Theme.of(context).appBarTheme.backgroundColor,
+          boxShadow: const [
+            GlobalConfigs.shadow,
+          ],
+        ),
+        child: child,
+      ),
+    );
   }
 }

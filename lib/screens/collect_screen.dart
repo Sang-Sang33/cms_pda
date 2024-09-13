@@ -66,63 +66,55 @@ class _CollectScreenState extends State<CollectScreen> {
               print(value);
             },
           ),
-          ClipPath(
-            clipper: HalfCircleBorderClipper(),
-            child: Container(
-              padding: const EdgeInsets.all(24),
-              margin: const EdgeInsets.only(bottom: 12),
-              decoration: BoxDecoration(
-                color: Theme.of(context).appBarTheme.backgroundColor,
-              ),
-              child: const Column(
-                children: [
-                  Row(
-                    children: [
-                      Expanded(
-                        flex: 1,
-                        child: MainDescription(
-                          label: '送货单',
-                          value: '62204070102',
-                        ),
+          const HalfCircleBorderContainer(
+            child: Column(
+              children: [
+                Row(
+                  children: [
+                    Expanded(
+                      flex: 1,
+                      child: MainDescription(
+                        label: '送货单',
+                        value: '62204070102',
                       ),
-                      SizedBox(
-                        width: 6,
+                    ),
+                    SizedBox(
+                      width: 6,
+                    ),
+                    Expanded(
+                      flex: 1,
+                      child: MainDescription(
+                        label: '库存地点',
+                        value: 'Z001',
                       ),
-                      Expanded(
-                        flex: 1,
-                        child: MainDescription(
-                          label: '库存地点',
-                          value: 'Z001',
-                        ),
+                    ),
+                  ],
+                ),
+                SizedBox(
+                  height: 6,
+                ),
+                Row(
+                  children: [
+                    Expanded(
+                      flex: 1,
+                      child: MainDescription(
+                        label: '收货人',
+                        value: 'SEAL',
                       ),
-                    ],
-                  ),
-                  SizedBox(
-                    height: 6,
-                  ),
-                  Row(
-                    children: [
-                      Expanded(
-                        flex: 1,
-                        child: MainDescription(
-                          label: '收货人',
-                          value: 'SEAL',
-                        ),
+                    ),
+                    SizedBox(
+                      width: 6,
+                    ),
+                    Expanded(
+                      flex: 1,
+                      child: MainDescription(
+                        label: '创建日期',
+                        value: '2024-09-11',
                       ),
-                      SizedBox(
-                        width: 6,
-                      ),
-                      Expanded(
-                        flex: 1,
-                        child: MainDescription(
-                          label: '创建日期',
-                          value: '2024-09-11',
-                        ),
-                      ),
-                    ],
-                  ),
-                ],
-              ),
+                    ),
+                  ],
+                ),
+              ],
             ),
           ),
           Expanded(

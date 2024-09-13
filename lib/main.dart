@@ -1,3 +1,4 @@
+import 'package:cms_pda/screens/check_detail_screen.dart';
 import 'package:cms_pda/screens/collect_screen.dart';
 import 'package:cms_pda/screens/collet_detail_screen.dart';
 import 'package:cms_pda/screens/home_screen.dart';
@@ -28,8 +29,14 @@ final GoRouter _router = GoRouter(
     ),
     GoRoute(
       path: '/qc/check',
-      builder: (_, __) => const QRViewExample(),
-    )
+      builder: (_, __) => const QcCheckScreen(),
+    ),
+    GoRoute(
+      path: '/qc/check/:orderCode',
+      builder: (_, state) => CheckDetailScreen(
+        orderCode: state.pathParameters['orderCode']!,
+      ),
+    ),
   ],
   initialLocation: '/login',
 );
@@ -47,7 +54,10 @@ class MyApp extends StatelessWidget {
     return MaterialApp.router(
       title: 'Flutter Demo',
       theme: ThemeData(
-        colorScheme: ColorScheme.fromSeed(seedColor: const Color(0xFF005dff)),
+        colorScheme: ColorScheme.fromSeed(
+          seedColor: const Color(0xFF005dff),
+          primary: const Color(0xFF008fff),
+        ),
         useMaterial3: true,
         appBarTheme: const AppBarTheme(
           backgroundColor: Color(0xFF005dff),
@@ -57,7 +67,7 @@ class MyApp extends StatelessWidget {
             fontSize: 20,
           ),
         ),
-        scaffoldBackgroundColor: Colors.white,
+        scaffoldBackgroundColor: const Color(0xfff6fbff),
         outlinedButtonTheme: const OutlinedButtonThemeData(
           style: ButtonStyle(
             foregroundColor: WidgetStatePropertyAll<Color>(

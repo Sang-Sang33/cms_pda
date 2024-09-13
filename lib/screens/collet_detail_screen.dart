@@ -97,7 +97,7 @@ class ColletDetailScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('收获列表'),
+        title: const Text('收货列表'),
         centerTitle: true,
       ),
       body: Padding(
