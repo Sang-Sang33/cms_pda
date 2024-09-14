@@ -72,7 +72,6 @@ class _CollectScreenState extends State<CollectScreen> {
                 Row(
                   children: [
                     Expanded(
-                      flex: 1,
                       child: MainDescription(
                         label: '送货单',
                         value: '62204070102',
@@ -82,7 +81,6 @@ class _CollectScreenState extends State<CollectScreen> {
                       width: 6,
                     ),
                     Expanded(
-                      flex: 1,
                       child: MainDescription(
                         label: '库存地点',
                         value: 'Z001',
@@ -96,7 +94,6 @@ class _CollectScreenState extends State<CollectScreen> {
                 Row(
                   children: [
                     Expanded(
-                      flex: 1,
                       child: MainDescription(
                         label: '收货人',
                         value: 'SEAL',
@@ -106,7 +103,6 @@ class _CollectScreenState extends State<CollectScreen> {
                       width: 6,
                     ),
                     Expanded(
-                      flex: 1,
                       child: MainDescription(
                         label: '创建日期',
                         value: '2024-09-11',
@@ -118,7 +114,6 @@ class _CollectScreenState extends State<CollectScreen> {
             ),
           ),
           Expanded(
-            flex: 1,
             child: CustomScrollView(
               slivers: [
                 SliverList.separated(

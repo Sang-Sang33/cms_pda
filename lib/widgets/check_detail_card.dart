@@ -3,15 +3,13 @@ import 'package:cms_pda/models/check_info.dart';
 import 'package:cms_pda/widgets/card_description.dart';
 import 'package:flutter/material.dart';
 
-class CheckCard extends StatelessWidget {
-  const CheckCard({
+class CheckDetailCard extends StatelessWidget {
+  const CheckDetailCard({
     super.key,
-    required this.checkInfo,
-    double? labelWidth,
-  }) : labelWidth = labelWidth ?? 100;
+    required this.checkDetail,
+  });
 
-  final CheckInfo checkInfo;
-  final double labelWidth;
+  final CheckDetail checkDetail;
 
   @override
   Widget build(BuildContext context) {
@@ -27,25 +25,22 @@ class CheckCard extends StatelessWidget {
         child: Column(
           children: <Widget>[
             CardDescription(
-              label: '物料',
-              value: checkInfo.materialCode,
-              labelWidth: labelWidth,
+              label: '条码',
+              value: checkDetail.materialCode,
             ),
             CardDescription(
-              label: '总数量',
-              value: '${checkInfo.nums}',
-              labelWidth: labelWidth,
+              label: '数量',
+              value: '${checkDetail.nums}',
             ),
             CardDescription(
-              label: '抽检数量',
-              value: checkInfo.checkedNums.toString(),
-              labelWidth: labelWidth,
+              label: '状态',
+              value: checkDetail.statusValue.text,
+              valueTextColor: checkDetail.statusValue.color,
             ),
             CardDescription(
-              label: '已抽检数量',
-              value: checkInfo.receivedNums.toString(),
-              valueTextColor: const Color(0xff005cff),
-              labelWidth: labelWidth,
+              label: '结果',
+              value: checkDetail.resultValue.text,
+              valueTextColor: checkDetail.resultValue.color,
             ),
           ],
         ),

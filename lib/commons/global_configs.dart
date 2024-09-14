@@ -7,4 +7,8 @@ class GlobalConfigs {
     blurRadius: 7,
     offset: Offset(0, 2), // 阴影偏移量，x轴为0，y轴为3
   );
+  static const successColor = Color(0xFF66BB6A);
+  static const warningColor = Color(0xffff8239);
+  static const errorColor = Color(0xffef4444);
+  static const processingColor = Color(0xff00aaff);
 }

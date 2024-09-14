@@ -1,3 +1,4 @@
+import 'package:cms_pda/commons/global_configs.dart';
 import 'package:cms_pda/models/material_info.dart';
 import 'package:cms_pda/widgets/card_description.dart';
 import 'package:flutter/material.dart';
@@ -14,11 +15,13 @@ class MaterialCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Card(
-      shape: const RoundedRectangleBorder(
-        borderRadius: BorderRadius.zero,
+    return Container(
+      decoration: const BoxDecoration(
+        color: Colors.white,
+        boxShadow: [
+          GlobalConfigs.shadow,
+        ],
       ),
-      margin: const EdgeInsets.symmetric(horizontal: 0),
       child: Padding(
         padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 12),
         child: Column(
@@ -52,8 +55,8 @@ class MaterialCard extends StatelessWidget {
               label: '是否质检',
               value: materialInfo.isChecked ? '质检' : '未质检',
               valueTextColor: materialInfo.isChecked
-                  ? Colors.green[400]
-                  : const Color(0xffff8239),
+                  ? GlobalConfigs.successColor
+                  : GlobalConfigs.warningColor,
             ),
           ],
         ),

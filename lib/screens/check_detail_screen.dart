@@ -1,9 +1,32 @@
 import 'package:cms_pda/commons/global_configs.dart';
-import 'package:cms_pda/models/value_label.dart';
+import 'package:cms_pda/models/check_info.dart';
+import 'package:cms_pda/models/enum.dart';
 import 'package:cms_pda/widgets/app_search_bar.dart';
+import 'package:cms_pda/widgets/check_detail_card.dart';
 import 'package:cms_pda/widgets/half_circle_border_clipper.dart';
 import 'package:cms_pda/widgets/main_description.dart';
 import 'package:flutter/material.dart';
+
+final List<CheckDetail> _checkDetails = [
+  CheckDetail(
+    materialCode: 'RCTKK3S848DF4817745',
+    nums: 889,
+    status: ScanCheckStatus.complete,
+    result: ScanResult.ok,
+  ),
+  CheckDetail(
+    materialCode: 'RCTKK3S848DF4817745',
+    nums: 442,
+    status: ScanCheckStatus.error,
+    result: ScanResult.ng,
+  ),
+  CheckDetail(
+    materialCode: 'RCTKK3S848DF4817745',
+    nums: 339,
+    status: ScanCheckStatus.processing,
+    result: ScanResult.ok,
+  ),
+];
 
 class CheckDetailScreen extends StatefulWidget {
   const CheckDetailScreen({
@@ -18,7 +41,7 @@ class CheckDetailScreen extends StatefulWidget {
 
 class _CheckDetailScreenState extends State<CheckDetailScreen> {
   ScanResult _searchResult = ScanResult.ng;
-  int _result = 1;
+  ScanResult _result = ScanResult.ok;
   String _orderCode = '';
 
   @override
@@ -30,30 +53,33 @@ class _CheckDetailScreenState extends State<CheckDetailScreen> {
   }
 
   List<Widget> _buildRadioGroup() {
-    final List<Widget> groups = [];
-    for (var element in ScanResult.values) {
-      groups.addAll([
-        Radio<ScanResult>(
-          value: element,
-          groupValue: _searchResult,
-          onChanged: (val) => setState(
-            () {
-              _searchResult = val!;
-            },
-          ),
-          materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
+    return <Widget>[
+      Radio<ScanResult>(
+        value: ScanResult.ng,
+        groupValue: _searchResult,
+        onChanged: (val) => setState(
+          () {
+            _searchResult = val!;
+          },
         ),
-        Text(element.label),
-      ]);
-      if (element.index != ScanResult.values.length - 1) {
-        groups.add(
-          const SizedBox(
-            width: 8,
-          ),
-        );
-      }
-    }
-    return groups;
+        materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
+      ),
+      const Text('设置扫码为NG'),
+      const SizedBox(
+        width: 8,
+      ),
+      Radio<ScanResult>(
+        value: ScanResult.ok,
+        groupValue: _searchResult,
+        onChanged: (val) => setState(
+          () {
+            _searchResult = val!;
+          },
+        ),
+        materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
+      ),
+      const Text('设置扫码为OK'),
+    ];
   }
 
   Widget _buildForm(BuildContext context) {
@@ -72,7 +98,10 @@ class _CheckDetailScreenState extends State<CheckDetailScreen> {
       margin: const EdgeInsets.only(
         top: 12,
       ),
-      padding: const EdgeInsets.symmetric(vertical: 16, horizontal: 8),
+      padding: const EdgeInsets.symmetric(
+        vertical: 16,
+        horizontal: 12,
+      ),
       child: Column(
         children: [
           Row(
@@ -88,16 +117,16 @@ class _CheckDetailScreenState extends State<CheckDetailScreen> {
                   textAlign: TextAlign.right,
                 ),
               ),
-              Radio<int>(
-                value: ScanResult.ok.value,
+              Radio<ScanResult>(
+                value: ScanResult.ok,
                 groupValue: _result,
                 onChanged: (val) => setState(() {
                   _result = val!;
                 }),
               ),
               const Text('OK'),
-              Radio<int>(
-                value: ScanResult.ng.value,
+              Radio<ScanResult>(
+                value: ScanResult.ng,
                 groupValue: _result,
                 onChanged: (val) => setState(() {
                   _result = val!;
@@ -112,7 +141,7 @@ class _CheckDetailScreenState extends State<CheckDetailScreen> {
               SizedBox(
                 width: 84,
                 child: Text(
-                  _result == ScanResult.ok.value ? 'OK原因' : 'NG原因',
+                  _result == ScanResult.ok ? 'OK原因' : 'NG原因',
                   style: const TextStyle(
                     color: Color.fromARGB(255, 50, 147, 232),
                     fontSize: 16,
@@ -131,16 +160,43 @@ class _CheckDetailScreenState extends State<CheckDetailScreen> {
                       vertical: 8,
                     ),
                     border: const OutlineInputBorder(),
-                    hintText:
-                        _result == ScanResult.ok.value ? '请输入OK原因' : '请输入NG原因',
+                    enabledBorder: const OutlineInputBorder(
+                      borderSide: BorderSide(color: Colors.transparent),
+                    ),
+                    focusedBorder: const OutlineInputBorder(
+                      borderSide: BorderSide(
+                        color: Colors.transparent,
+                      ),
+                    ),
+                    hintText: _result == ScanResult.ok ? '请输入OK原因' : '请输入NG原因',
                     hintStyle: const TextStyle(
                       color: Color.fromARGB(255, 92, 163, 226),
                     ),
+                    filled: true,
+                    fillColor: Colors.white,
                   ),
                   maxLines: 2,
                 ),
               )
             ],
+          )
+        ],
+      ),
+    );
+  }
+
+  Widget _buildList() {
+    return Expanded(
+      child: CustomScrollView(
+        slivers: [
+          SliverList.separated(
+            itemBuilder: (conetxt, index) =>
+                CheckDetailCard(checkDetail: _checkDetails[index]),
+            separatorBuilder: (BuildContext context, int index) =>
+                const SizedBox(
+              height: 12,
+            ),
+            itemCount: _checkDetails.length,
           )
         ],
       ),
@@ -191,7 +247,6 @@ class _CheckDetailScreenState extends State<CheckDetailScreen> {
                 Row(
                   children: [
                     Expanded(
-                      flex: 1,
                       child: MainDescription(
                         label: '送货单',
                         value: _orderCode,
@@ -201,7 +256,6 @@ class _CheckDetailScreenState extends State<CheckDetailScreen> {
                       width: 6,
                     ),
                     const Expanded(
-                      flex: 1,
                       child: MainDescription(
                         label: '抽检总数量',
                         value: '600',
@@ -212,7 +266,6 @@ class _CheckDetailScreenState extends State<CheckDetailScreen> {
                 const Row(
                   children: [
                     Expanded(
-                      flex: 1,
                       child: MainDescription(
                         label: 'OK总数量',
                         value: '360',
@@ -222,7 +275,6 @@ class _CheckDetailScreenState extends State<CheckDetailScreen> {
                       width: 6,
                     ),
                     Expanded(
-                      flex: 1,
                       child: MainDescription(
                         label: 'NG总数量',
                         value: '240',
@@ -234,6 +286,7 @@ class _CheckDetailScreenState extends State<CheckDetailScreen> {
               ],
             ),
           ),
+          _buildList()
         ],
       ),
     );

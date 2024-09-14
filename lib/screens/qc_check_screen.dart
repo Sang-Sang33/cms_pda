@@ -1,6 +1,6 @@
 import 'package:cms_pda/commons/global_configs.dart';
 import 'package:cms_pda/models/check_info.dart';
-import 'package:cms_pda/models/value_label.dart';
+import 'package:cms_pda/models/enum.dart';
 import 'package:cms_pda/widgets/app_search_bar.dart';
 import 'package:cms_pda/widgets/check_card.dart';
 import 'package:cms_pda/widgets/half_circle_border_clipper.dart';
@@ -43,16 +43,16 @@ class QcCheckScreen extends StatefulWidget {
 }
 
 class _QcCheckScreenState extends State<QcCheckScreen> {
-  CheckStatus _checkStatus = CheckStatus.normal;
+  UrgencyDegree _checkStatus = UrgencyDegree.normal;
   String _orderCode = '';
 
   List<Widget> _buildRadioGroup() {
     final List<Widget> groups = [
       const Text('请选择：'),
     ];
-    for (var element in CheckStatus.values) {
+    for (var element in UrgencyDegree.values) {
       groups.addAll([
-        Radio<CheckStatus>(
+        Radio<UrgencyDegree>(
           value: element,
           groupValue: _checkStatus,
           onChanged: (val) => setState(
@@ -64,7 +64,7 @@ class _QcCheckScreenState extends State<QcCheckScreen> {
         ),
         Text(element.label),
       ]);
-      if (element.index != CheckStatus.values.length - 1) {
+      if (element.index != UrgencyDegree.values.length - 1) {
         groups.add(
           const SizedBox(
             width: 8,
@@ -126,7 +126,6 @@ class _QcCheckScreenState extends State<QcCheckScreen> {
                 Row(
                   children: [
                     const Expanded(
-                      flex: 1,
                       child: MainDescription(
                         label: '作业员',
                         value: 'admin',
@@ -136,7 +135,6 @@ class _QcCheckScreenState extends State<QcCheckScreen> {
                       width: 6,
                     ),
                     Expanded(
-                      flex: 1,
                       child: MainDescription(
                         label: '送货单',
                         value: _orderCode,
@@ -150,7 +148,6 @@ class _QcCheckScreenState extends State<QcCheckScreen> {
                 const Row(
                   children: [
                     Expanded(
-                      flex: 1,
                       child: MainDescription(
                         label: '总数量',
                         value: '640',
@@ -160,7 +157,6 @@ class _QcCheckScreenState extends State<QcCheckScreen> {
                       width: 6,
                     ),
                     Expanded(
-                      flex: 1,
                       child: MainDescription(
                         label: '需抽检总数量',
                         value: '600',
@@ -171,7 +167,6 @@ class _QcCheckScreenState extends State<QcCheckScreen> {
                 const Row(
                   children: [
                     Expanded(
-                      flex: 1,
                       child: MainDescription(
                         label: '已抽检数量',
                         value: '360',
@@ -183,7 +178,6 @@ class _QcCheckScreenState extends State<QcCheckScreen> {
             ),
           ),
           Expanded(
-            flex: 1,
             child: CustomScrollView(
               slivers: [
                 SliverList.separated(
