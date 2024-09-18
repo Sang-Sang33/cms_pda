@@ -3,8 +3,10 @@ import 'package:cms_pda/models/check_info.dart';
 import 'package:cms_pda/models/enum.dart';
 import 'package:cms_pda/widgets/app_search_bar.dart';
 import 'package:cms_pda/widgets/check_detail_card.dart';
+import 'package:cms_pda/widgets/check_dialog.dart';
 import 'package:cms_pda/widgets/half_circle_border_clipper.dart';
 import 'package:cms_pda/widgets/main_description.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 final List<CheckDetail> _checkDetails = [
@@ -82,7 +84,89 @@ class _CheckDetailScreenState extends State<CheckDetailScreen> {
     ];
   }
 
-  Widget _buildForm(BuildContext context) {
+  Widget _buildCheckResultRadio(StateSetter setState) {
+    return Row(
+      children: [
+        const SizedBox(
+          width: 84,
+          child: Text(
+            '校验结果',
+            style: TextStyle(
+              color: Color.fromARGB(255, 50, 147, 232),
+              fontSize: 16,
+            ),
+            textAlign: TextAlign.right,
+          ),
+        ),
+        Radio<ScanResult>(
+          value: ScanResult.ok,
+          groupValue: _result,
+          onChanged: (val) => setState(() {
+            _result = val!;
+          }),
+        ),
+        const Text('OK'),
+        Radio<ScanResult>(
+          value: ScanResult.ng,
+          groupValue: _result,
+          onChanged: (val) => setState(() {
+            _result = val!;
+          }),
+        ),
+        const Text('NG'),
+      ],
+    );
+  }
+
+  Widget _buildReasonInput(StateSetter setState) {
+    return Row(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        SizedBox(
+          width: 84,
+          child: Text(
+            _result == ScanResult.ok ? 'OK原因' : 'NG原因',
+            style: const TextStyle(
+              color: Color.fromARGB(255, 50, 147, 232),
+              fontSize: 16,
+            ),
+            textAlign: TextAlign.right,
+          ),
+        ),
+        const SizedBox(
+          width: 16,
+        ),
+        Expanded(
+          child: TextFormField(
+            decoration: InputDecoration(
+              contentPadding: const EdgeInsets.symmetric(
+                horizontal: 16,
+                vertical: 8,
+              ),
+              border: const OutlineInputBorder(),
+              enabledBorder: const OutlineInputBorder(
+                borderSide: BorderSide(color: Colors.transparent),
+              ),
+              focusedBorder: const OutlineInputBorder(
+                borderSide: BorderSide(
+                  color: Colors.transparent,
+                ),
+              ),
+              hintText: _result == ScanResult.ok ? '请输入OK原因' : '请输入NG原因',
+              hintStyle: const TextStyle(
+                color: Color.fromARGB(255, 92, 163, 226),
+              ),
+              filled: true,
+              fillColor: Colors.white,
+            ),
+            maxLines: 2,
+          ),
+        )
+      ],
+    );
+  }
+
+  Widget _buildForm() {
     return Container(
       decoration: BoxDecoration(
         color: const Color(0xffccdcf9),
@@ -104,83 +188,97 @@ class _CheckDetailScreenState extends State<CheckDetailScreen> {
       ),
       child: Column(
         children: [
-          Row(
-            children: [
-              const SizedBox(
-                width: 84,
-                child: Text(
-                  '校验结果',
-                  style: TextStyle(
-                    color: Color.fromARGB(255, 50, 147, 232),
-                    fontSize: 16,
-                  ),
-                  textAlign: TextAlign.right,
-                ),
-              ),
-              Radio<ScanResult>(
-                value: ScanResult.ok,
-                groupValue: _result,
-                onChanged: (val) => setState(() {
-                  _result = val!;
-                }),
-              ),
-              const Text('OK'),
-              Radio<ScanResult>(
-                value: ScanResult.ng,
-                groupValue: _result,
-                onChanged: (val) => setState(() {
-                  _result = val!;
-                }),
-              ),
-              const Text('NG'),
-            ],
-          ),
-          Row(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              SizedBox(
-                width: 84,
-                child: Text(
-                  _result == ScanResult.ok ? 'OK原因' : 'NG原因',
-                  style: const TextStyle(
-                    color: Color.fromARGB(255, 50, 147, 232),
-                    fontSize: 16,
-                  ),
-                  textAlign: TextAlign.right,
-                ),
-              ),
-              const SizedBox(
-                width: 16,
-              ),
-              Expanded(
-                child: TextFormField(
-                  decoration: InputDecoration(
-                    contentPadding: const EdgeInsets.symmetric(
-                      horizontal: 16,
-                      vertical: 8,
-                    ),
-                    border: const OutlineInputBorder(),
-                    enabledBorder: const OutlineInputBorder(
-                      borderSide: BorderSide(color: Colors.transparent),
-                    ),
-                    focusedBorder: const OutlineInputBorder(
-                      borderSide: BorderSide(
-                        color: Colors.transparent,
+          _buildCheckResultRadio(setState),
+          _buildReasonInput(setState),
+        ],
+      ),
+    );
+  }
+
+  void _onItemEdit(CheckDetail detail) {
+    showDialog<void>(
+      context: context,
+      barrierDismissible: false,
+      builder: (context) => CheckDialog(
+        cancelCallBack: () {},
+        confirmCallBack: () {},
+        content: StatefulBuilder(
+          builder: (BuildContext context, StateSetter setState) =>
+              SingleChildScrollView(
+            child: Column(
+              children: [
+                Row(
+                  children: [
+                    const SizedBox(
+                      width: 80,
+                      child: Text(
+                        '条码：',
+                        textAlign: TextAlign.right,
+                        style: TextStyle(
+                          color: Color(0xff626262),
+                          fontSize: 16,
+                        ),
                       ),
                     ),
-                    hintText: _result == ScanResult.ok ? '请输入OK原因' : '请输入NG原因',
-                    hintStyle: const TextStyle(
-                      color: Color.fromARGB(255, 92, 163, 226),
+                    Text(
+                      detail.materialCode,
+                      style: const TextStyle(
+                        color: Colors.black87,
+                        fontSize: 16,
+                      ),
                     ),
-                    filled: true,
-                    fillColor: Colors.white,
-                  ),
-                  maxLines: 2,
+                  ],
                 ),
-              )
-            ],
-          )
-        ],
+                Row(
+                  children: [
+                    const SizedBox(
+                      width: 80,
+                      child: Text(
+                        'OK数量：',
+                        textAlign: TextAlign.right,
+                        style: TextStyle(
+                          color: Color(0xff626262),
+                          fontSize: 16,
+                        ),
+                      ),
+                    ),
+                    Text(
+                      detail.nums.toString(),
+                      style: const TextStyle(
+                        color: Colors.black87,
+                        fontSize: 16,
+                      ),
+                    ),
+                  ],
+                ),
+                const Row(
+                  children: [
+                    SizedBox(
+                      width: 80,
+                      child: Text(
+                        'NG数量：',
+                        textAlign: TextAlign.right,
+                        style: TextStyle(
+                          color: Color(0xff626262),
+                          fontSize: 16,
+                        ),
+                      ),
+                    ),
+                    Text(
+                      '0',
+                      style: const TextStyle(
+                        color: Colors.black87,
+                        fontSize: 16,
+                      ),
+                    ),
+                  ],
+                ),
+                _buildCheckResultRadio(setState),
+                _buildReasonInput(setState),
+              ],
+            ),
+          ),
+        ),
       ),
     );
   }
@@ -190,8 +288,10 @@ class _CheckDetailScreenState extends State<CheckDetailScreen> {
       child: CustomScrollView(
         slivers: [
           SliverList.separated(
-            itemBuilder: (conetxt, index) =>
-                CheckDetailCard(checkDetail: _checkDetails[index]),
+            itemBuilder: (conetxt, index) => CheckDetailCard(
+              checkDetail: _checkDetails[index],
+              onDetail: () => _onItemEdit(_checkDetails[index]),
+            ),
             separatorBuilder: (BuildContext context, int index) =>
                 const SizedBox(
               height: 12,
@@ -282,7 +382,7 @@ class _CheckDetailScreenState extends State<CheckDetailScreen> {
                     ),
                   ],
                 ),
-                _buildForm(context)
+                _buildForm()
               ],
             ),
           ),

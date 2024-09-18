@@ -7,9 +7,11 @@ class CheckDetailCard extends StatelessWidget {
   const CheckDetailCard({
     super.key,
     required this.checkDetail,
+    required this.onDetail,
   });
 
   final CheckDetail checkDetail;
+  final VoidCallback onDetail;
 
   @override
   Widget build(BuildContext context) {
@@ -36,6 +38,14 @@ class CheckDetailCard extends StatelessWidget {
               label: '状态',
               value: checkDetail.statusValue.text,
               valueTextColor: checkDetail.statusValue.color,
+              trailing: SizedBox(
+                height: 32,
+                child: OutlinedButton.icon(
+                  onPressed: onDetail,
+                  label: const Text('编辑'),
+                  icon: const Icon(Icons.edit_document),
+                ),
+              ),
             ),
             CardDescription(
               label: '结果',
