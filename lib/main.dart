@@ -3,6 +3,7 @@ import 'package:cms_pda/screens/collect_screen.dart';
 import 'package:cms_pda/screens/collet_detail_screen.dart';
 import 'package:cms_pda/screens/home_screen.dart';
 import 'package:cms_pda/screens/login_screen.dart';
+import 'package:cms_pda/screens/palletize_screen.dart';
 import 'package:cms_pda/screens/qc_check_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
@@ -36,6 +37,10 @@ final GoRouter _router = GoRouter(
       builder: (_, state) => CheckDetailScreen(
         orderCode: state.pathParameters['orderCode']!,
       ),
+    ),
+    GoRoute(
+      path: '/palletize',
+      builder: (_, __) => const PalletizeScreen(),
     ),
   ],
   initialLocation: '/login',

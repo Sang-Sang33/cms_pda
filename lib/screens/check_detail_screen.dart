@@ -6,7 +6,6 @@ import 'package:cms_pda/widgets/check_detail_card.dart';
 import 'package:cms_pda/widgets/check_dialog.dart';
 import 'package:cms_pda/widgets/half_circle_border_clipper.dart';
 import 'package:cms_pda/widgets/main_description.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 final List<CheckDetail> _checkDetails = [
@@ -266,7 +265,7 @@ class _CheckDetailScreenState extends State<CheckDetailScreen> {
                     ),
                     Text(
                       '0',
-                      style: const TextStyle(
+                      style: TextStyle(
                         color: Colors.black87,
                         fontSize: 16,
                       ),
