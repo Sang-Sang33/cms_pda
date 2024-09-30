@@ -1,5 +1,8 @@
 import 'package:cms_pda/commons/global_configs.dart';
+import 'package:cms_pda/models/palletize_info.dart';
 import 'package:cms_pda/widgets/app_search_bar.dart';
+import 'package:cms_pda/widgets/bottom_navigation_bar_container.dart';
+import 'package:cms_pda/widgets/palletize_card.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_picker_plus/flutter_picker_plus.dart';
 
@@ -23,6 +26,27 @@ class _PalletizeScreenState extends State<PalletizeScreen> {
   int currentFloor = 1;
   int _locationIndex = -1;
 
+  List<PalletizeInfo> palletizeLists = [
+    const PalletizeInfo(
+      materialName: 'XC21蓝宝石',
+      materialCode: 'SFDFG88847575181',
+      materialInfo: '特殊符号 开冲 23*33*45',
+      nums: 359,
+    ),
+    const PalletizeInfo(
+      materialName: 'XY18无用大宝石',
+      materialCode: 'SFDFG88847GD518121',
+      materialInfo: '的确没有什么作用',
+      nums: 442,
+    ),
+    const PalletizeInfo(
+      materialName: 'XY23滴露石',
+      materialCode: 'SFDFG8348147GD518121',
+      materialInfo: '通便',
+      nums: 442,
+    ),
+  ];
+
   void updateFloor(int floot) {
     setState(() {
       currentFloor = floot;
@@ -34,7 +58,10 @@ class _PalletizeScreenState extends State<PalletizeScreen> {
       adapter: PickerDataAdapter<String>(
         pickerData: _locations,
       ),
+      itemExtent: 32,
       changeToFirst: true,
+      cancelText: '取消',
+      confirmText: '确认',
       hideHeader: false,
       selectedTextStyle: const TextStyle(color: Colors.blue),
       onConfirm: (picker, value) {
@@ -43,9 +70,11 @@ class _PalletizeScreenState extends State<PalletizeScreen> {
       },
     ).showModal(context); //_sca
     print('result$result');
-    setState(() {
-      _locationIndex = result[0];
-    });
+    if (result != null) {
+      setState(() {
+        _locationIndex = result[0];
+      });
+    }
   }
 
   String get currentLocation =>
@@ -58,7 +87,39 @@ class _PalletizeScreenState extends State<PalletizeScreen> {
         title: const Text('组垛埋货'),
         centerTitle: true,
       ),
+      bottomNavigationBar: BottomNavigationBarContainer(
+        child: Row(
+          children: [
+            Expanded(
+              child: FilledButton(
+                onPressed: () {},
+                style: const ButtonStyle(
+                  backgroundColor: WidgetStatePropertyAll<Color>(
+                    Color(0xffd3eaf9),
+                  ),
+                ),
+                child: Text(
+                  '取消',
+                  style: TextStyle(
+                    color: Theme.of(context).colorScheme.primary,
+                  ),
+                ),
+              ),
+            ),
+            const SizedBox(
+              width: 16,
+            ),
+            Expanded(
+              child: FilledButton(
+                onPressed: () {},
+                child: const Text('保存'),
+              ),
+            ),
+          ],
+        ),
+      ),
       body: Column(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
           AppSearchBar(
             hintText: '请扫描托盘位置或物流包装',
@@ -73,6 +134,7 @@ class _PalletizeScreenState extends State<PalletizeScreen> {
                 GlobalConfigs.shadow,
               ],
             ),
+            margin: GlobalConfigs.eob12,
             child: Column(
               children: [
                 Material(
@@ -123,10 +185,55 @@ class _PalletizeScreenState extends State<PalletizeScreen> {
                       print(123);
                     },
                   ),
-                )
+                ),
+                const Divider(
+                  height: 1,
+                ),
+                Material(
+                  child: ListTile(
+                    leading: const Text(
+                      '托盘条码：',
+                      style: TextStyle(
+                        fontSize: 16,
+                      ),
+                    ),
+                    tileColor: Colors.white,
+                    title: const Text(
+                      'A0125181',
+                      textAlign: TextAlign.right,
+                    ),
+                    trailing: Icon(
+                      Icons.refresh_rounded,
+                      color: Theme.of(context).colorScheme.primary,
+                    ),
+                    onTap: () {
+                      print(123);
+                    },
+                  ),
+                ),
               ],
             ),
           ),
+          Expanded(
+            child: CustomScrollView(
+              slivers: [
+                SliverList.separated(
+                  itemBuilder: (context, index) => PalletizeCard(
+                    palletizeInfo: palletizeLists[index],
+                    onDelete: () {
+                      setState(() {
+                        palletizeLists.removeAt(index);
+                      });
+                    },
+                  ),
+                  separatorBuilder: (context, index) => const SizedBox(
+                    height: 12,
+                  ),
+                  itemCount: palletizeLists.length,
+                )
+              ],
+            ),
+          )
         ],
       ),
     );

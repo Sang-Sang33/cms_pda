@@ -2,6 +2,7 @@ import 'package:cms_pda/commons/global_configs.dart';
 import 'package:cms_pda/models/check_info.dart';
 import 'package:cms_pda/models/enum.dart';
 import 'package:cms_pda/widgets/app_search_bar.dart';
+import 'package:cms_pda/widgets/bottom_navigation_bar_container.dart';
 import 'package:cms_pda/widgets/check_card.dart';
 import 'package:cms_pda/widgets/half_circle_border_clipper.dart';
 import 'package:cms_pda/widgets/main_description.dart';
@@ -82,9 +83,7 @@ class _QcCheckScreenState extends State<QcCheckScreen> {
         title: const Text('来料QC抽检'),
         centerTitle: true,
       ),
-      bottomNavigationBar: Container(
-        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-        color: const Color.fromARGB(255, 219, 230, 240),
+      bottomNavigationBar: BottomNavigationBarContainer(
         child: FilledButton(
           onPressed: _orderCode.isEmpty
               ? null
@@ -107,7 +106,7 @@ class _QcCheckScreenState extends State<QcCheckScreen> {
           ),
           Container(
             padding: const EdgeInsets.symmetric(vertical: 8),
-            margin: const EdgeInsets.only(bottom: 12),
+            margin: GlobalConfigs.eob12,
             decoration: const BoxDecoration(
               color: Colors.white,
               boxShadow: [

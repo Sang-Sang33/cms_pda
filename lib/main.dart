@@ -72,6 +72,9 @@ class MyApp extends StatelessWidget {
             fontSize: 20,
           ),
         ),
+        bottomNavigationBarTheme: const BottomNavigationBarThemeData(
+          backgroundColor: Color(0xfff7fbff),
+        ),
         scaffoldBackgroundColor: const Color(0xfff6fbff),
         outlinedButtonTheme: const OutlinedButtonThemeData(
           style: ButtonStyle(

@@ -54,7 +54,7 @@ class HalfCircleBorderContainer extends StatelessWidget {
       clipper: HalfCircleBorderClipper(),
       child: Container(
         padding: const EdgeInsets.all(24),
-        margin: const EdgeInsets.only(bottom: 12),
+        margin: GlobalConfigs.eob12,
         decoration: BoxDecoration(
           color: Theme.of(context).appBarTheme.backgroundColor,
           boxShadow: const [

@@ -2,6 +2,7 @@ import 'package:cms_pda/commons/global_configs.dart';
 import 'package:cms_pda/models/check_info.dart';
 import 'package:cms_pda/models/enum.dart';
 import 'package:cms_pda/widgets/app_search_bar.dart';
+import 'package:cms_pda/widgets/bottom_navigation_bar_container.dart';
 import 'package:cms_pda/widgets/check_detail_card.dart';
 import 'package:cms_pda/widgets/check_dialog.dart';
 import 'package:cms_pda/widgets/half_circle_border_clipper.dart';
@@ -309,9 +310,7 @@ class _CheckDetailScreenState extends State<CheckDetailScreen> {
         title: const Text('校验单详情'),
         centerTitle: true,
       ),
-      bottomNavigationBar: Container(
-        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-        color: const Color.fromARGB(255, 219, 230, 240),
+      bottomNavigationBar: BottomNavigationBarContainer(
         child: FilledButton(
           onPressed: () {},
           child: const Text('提交数据'),
@@ -327,7 +326,7 @@ class _CheckDetailScreenState extends State<CheckDetailScreen> {
           ),
           Container(
             padding: const EdgeInsets.symmetric(vertical: 8),
-            margin: const EdgeInsets.only(bottom: 12),
+            margin: GlobalConfigs.eob12,
             decoration: const BoxDecoration(
               color: Colors.white,
               boxShadow: [

@@ -1,6 +1,7 @@
 import 'dart:developer';
 import 'dart:io';
 
+import 'package:cms_pda/commons/global_configs.dart';
 import 'package:flutter/material.dart';
 import 'package:qr_code_scanner/qr_code_scanner.dart';
 
@@ -146,7 +147,7 @@ class _AppSearchBarState extends State<AppSearchBar> {
     return Container(
       color: Theme.of(context).appBarTheme.backgroundColor,
       padding: const EdgeInsets.fromLTRB(12, 0, 12, 12),
-      margin: const EdgeInsets.only(bottom: 12),
+      margin: GlobalConfigs.eob12,
       child: SearchBar(
         controller: controller,
         hintText: widget.hintText,

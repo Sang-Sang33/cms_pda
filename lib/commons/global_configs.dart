@@ -11,4 +11,5 @@ class GlobalConfigs {
   static const warningColor = Color(0xffff8239);
   static const errorColor = Color(0xffef4444);
   static const processingColor = Color(0xff00aaff);
+  static const eob12 = EdgeInsets.only(bottom: 12);
 }
